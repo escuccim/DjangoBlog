@@ -1,0 +1,8 @@
+{% if blog.tags %}
+    <p class="small">Labels:
+    {% for tag in blog.tags.all %}
+        <a href="{% url 'blog:labels' tag.name %}">{{ tag.name }}</a>
+        {% if not forloop.last %},{% endif %}
+    {% endfor %}
+    </p>
+{% endif %}

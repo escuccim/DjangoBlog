@@ -1,0 +1,27 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Archives
+    </div>
+    <div class="panel-body">
+        <ul class="list-group">
+		    {% for year, month_dict in archives.items %}
+        	    <li class="list-group-item"><a href="#c{{ year }}" data-toggle="collapse">{{ year }}</a>
+				    <div class="panel-collapse collapse" id="c{{ year }}">
+                        <ul class="smallindent">
+                            {% for month, post_list in month_dict.items  %}
+                                <li class="small"><a href="#c{{ year }}m{{month}}" data-toggle="collapse">{{month }}</a>
+                                <div class="panel-collapse collapse" id="c{{year}}m{{month}}">
+                                    <ul class="smallindent">
+                                        {% for post in post_list %}
+                                            <li class="smalltext"><a href="{% url 'blog:show' post.1 %}">{{ post.2 }}</a>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endfor %}
+                        </ul>
+				    </div>
+                </li>
+            {% endfor %}
+	    </ul>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Django Test</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog">Blog</a></li>
+        {% if request.user.is_authenticated %}
+            <li><a href="{% url 'blog:logout' %}">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'blog:login' %}">Login</a></li>
+            <li><a href="{% url 'blog:register' %}">Register</a></li>
+        {% endif %}
+    </ul>
+  </div>
+</nav>

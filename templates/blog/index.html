@@ -1,0 +1,54 @@
+{% extends 'blog/base.html' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-9">
+            {% if blogs %}
+                {% for blog in blogs %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3><a href="{% url 'blog:show' blog.slug %}">{{  blog.title }}</a></h3>
+                            <p class="small">{{  blog.updated_at }}</p>
+                        </div>
+                        <div class="panel-body">
+                            {{  blog.body|safe }}
+
+                            <p>{% include 'blog/partials/labels.html' %}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if blogs.has_other_pages %}
+
+                    <ul class="pagination">
+                        {% if blogs.has_previous %}
+                            <li><a href="?page={{ blogs.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+
+                        {% for i in blogs.paginator.page_range %}
+                            {% if blogs.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if blogs.has_next %}
+                            <li><a href="?page={{ blogs.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                {% include 'blog/partials/_archives.html' %}
+            </div>
+        </div>
+    {% else %}
+        <p>There are no articles!</p>
+    {% endif %}
+
+
+{%  endblock %}

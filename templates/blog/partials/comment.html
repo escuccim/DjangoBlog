@@ -1,0 +1,48 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{  comment.author.first_name }} {{  comment.author.last_name }}
+        <br>{{ comment.created_at }}
+    </div>
+    <div class="panel-body">
+        <p>{{  comment.body|safe }}</p>
+    </div>
+    <div class="panel-footer">
+    {% if user.is_authenticated %}
+        <button class="btn btn-default btn-sm reply-button" data-val="{{  comment.pk }}">Reply</button>
+        {% if user.author.pk == comment.author.pk %}
+            <a href="{% url 'blog:comment.delete' comment.pk %}" class="btn btn-warning btn-sm">Delete</a>
+        {% endif %}
+    {% endif %}
+    </div>
+</div>
+
+<div class="panel panel-default" id="comment_{{ comment.pk }}_reply" style="display:none;">
+    <div class="panel-body">
+        <form action="{% url 'blog:comment' blog.slug %}" method="POST">
+            <input type="hidden" name="parent_id" value="{{  comment.pk }}">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-12">
+                    <textarea class="form-control" name="body"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary btn-sm">Post Reply</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if comment.children %}
+    {% for reply in comment.children %}
+        <div class="row">
+            <div class="col-md-11 col-md-offset-1">
+                {% include 'blog/partials/comment.html' with comment=reply %}
+            </div>
+        </div>
+
+    {% endfor %}
+{% endif %}
+

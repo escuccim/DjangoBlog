@@ -1,0 +1,13 @@
+{% if user.is_authenticated %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form action="{% url 'blog:comment' blog.slug %}" method="POST">
+                {% csrf_token %}
+                {%  for field in comment_form.visible_fields %}
+                    {{  field }}
+                {% endfor %}
+                <p><button type="submit" class="btn btn-primary" id="submit">Post Comment</button></p>
+            </form>
+        </div>
+    </div>
+{% endif %}
