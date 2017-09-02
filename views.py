@@ -122,7 +122,9 @@ def DeleteComment(request, pk):
 def get_archives():
     blog_list = Blog.objects.raw("SELECT strftime('%m', updated_at) as month, strftime('%Y', updated_at) as year, id, slug, title from blog_blog order by year desc, month desc")
     blog_dict = {}
+    month_dict = {}
     for item in blog_list:
-        blog_dict.setdefault(item.year, {item.month : []})
-        blog_dict[item.year][item.month].append([item.id, item.slug, item.title])
+        month_dict.setdefault(item.month, []).append([item.id, item.slug, item.title])
+        blog_dict.setdefault(item.year, month_dict )
+
     return blog_dict

@@ -1,4 +1,6 @@
-{% extends 'blog/base.html' %}
+{% extends 'base.html' %}
+
+{% block title %}{{ blog.title }}{% endblock %}
 
 {% block body %}
     {% if blog %}
@@ -9,8 +11,14 @@
                 <p>By : {{  blog.author.first_name }} {{  blog.author.last_name }}<br>
             </div>
             <div class="panel-body">
-                <p>{{  blog.body|safe }}</p>
-
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>{% if blog.image %}
+                            <img src="{{ blog.image }}" align="right">
+                        {% endif %}
+                        {{  blog.body|safe }}</p>
+                    </div>
+                </div>
                 {% include 'blog/partials/labels.html' %}
             </div>
         </div>
