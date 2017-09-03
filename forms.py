@@ -1,5 +1,5 @@
 from  django import forms
-from blog.models import Comment, Author
+from blog.models import Comment
 from django.contrib.auth.models import User
 
 
@@ -18,18 +18,3 @@ class CommentForm(BootstrapModelForm):
     class Meta:
         model = Comment
         fields = ('body','parent_id')
-
-class UserForm(BootstrapModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
-
-
-    class Meta:
-        model = User
-        fields = {'username', 'email', 'password'}
-
-class UserProfileForm(BootstrapModelForm):
-    image = forms.ImageField(required=False)
-
-    class Meta:
-        model = Author
-        fields = {'first_name', 'last_name', 'image'}

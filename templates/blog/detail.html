@@ -8,7 +8,7 @@
             <div class="panel-heading">
                 <p class="small">{{ blog.published_at }}</p>
                 <h1>{{ blog }}</h1>
-                <p>By : {{  blog.author.first_name }} {{  blog.author.last_name }}<br>
+                <p>By : {{  blog.author.userprofile.first_name }} {{  blog.author.userprofile.last_name }}<br>
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -39,7 +39,7 @@
         {% if user.is_authenticated %}
             {% include 'blog/partials/comment_form.html' %}
         {% else %}
-            <p><a href="{% url 'blog:login' %}">Login</a> or <a href="{% url 'blog:register' %}">register</a> to comment!</p>
+            <p><a href="{% url 'register:login' %}">Login</a> or <a href="{% url 'register:register' %}">register</a> to comment!</p>
         {% endif %}
     {% endif %}
 {% endblock %}

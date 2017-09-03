@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from .models import Blog, Tag, Comment, Author
-from .forms import CommentForm, UserForm, UserProfileForm
-from django.contrib.auth import login, logout, authenticate
+from .models import Blog, Tag, Comment
+from .forms import CommentForm
+
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
@@ -56,63 +56,6 @@ def PostComment(request, slug):
 
     return redirect('blog:show', slug=blog.slug)
 
-def Logout(request):
-    logout(request)
-    return redirect('blog:index')
-
-def Login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = authenticate(username=username, password=password)
-
-        if user:
-            if user.is_active:
-                login(request,user)
-                return redirect('/blog')
-            else:
-                return HttpResponse('Your account is inactive!')
-        else:
-            print "Invalid login details: {0}, {1}".format(username, password)
-            return HttpResponse("Invalid login details supplied.")
-    else:
-        return render(request, 'blog/login.html', {})
-
-def Register(request):
-    registered = False
-
-    if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
-
-        if user_form.is_valid():
-            user = user_form.save()
-
-            user.set_password(user.password)
-            user.save()
-
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.email = user.email
-
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-
-            profile.save()
-
-            registered = True
-
-        else:
-            return HttpResponse(user_form.errors)
-            print user_form.errors, profile_form.errors
-
-    else:
-        user_form = UserForm()
-        profile_form = UserProfileForm()
-
-    return render(request, 'blog/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
-
 def DeleteComment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     blog = comment.blog
@@ -128,3 +71,6 @@ def get_archives():
         blog_dict.setdefault(item.year, month_dict )
 
     return blog_dict
+
+def Amp(request, slug):
+    pass

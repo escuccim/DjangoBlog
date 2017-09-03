@@ -12,19 +12,9 @@ class Tag(models.Model):
     def __unicode__(self):
         return self.name
 
-class Author(models.Model):
-    user = models.OneToOneField(User)
-    email = models.EmailField(max_length=50)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    image = models.ImageField(null=True, blank=True)
-
-    def __unicode__(self):
-        return self.first_name + ' ' + self.last_name
-
 # Create your models here.
 class Blog(models.Model):
-    author = models.ForeignKey(Author)
+    author = models.ForeignKey(User)
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     published = models.BooleanField(default=0)
@@ -60,7 +50,7 @@ class Blog(models.Model):
         ordering = ['-updated_at']
 
 class Comment(models.Model):
-    author = models.ForeignKey(Author)
+    author = models.ForeignKey(User)
     body = models.TextField()
     blog = models.ForeignKey(Blog)
     parent = models.ForeignKey("self", null=True, blank=True)
