@@ -5,6 +5,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils.timezone import datetime
+from datetime import datetime
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
@@ -44,6 +46,11 @@ class Blog(models.Model):
     def comments(self):
         comment_set = Comment.objects.filter(blog=self).filter(parent=None)
         return comment_set
+
+    def is_published(self):
+        if not self.published:
+            return False
+        return datetime.now(self.published_at.tzinfo) > self.published_at
 
     class Meta:
         get_latest_by = "updated_at"

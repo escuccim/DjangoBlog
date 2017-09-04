@@ -1,5 +1,5 @@
 from  django import forms
-from blog.models import Comment
+from blog.models import Comment, Tag, Blog
 from django.contrib.auth.models import User
 
 
@@ -17,4 +17,15 @@ class CommentForm(BootstrapModelForm):
 
     class Meta:
         model = Comment
-        fields = ('body','parent_id')
+        fields = ['body','parent_id']
+
+class BlogEditForm(BootstrapModelForm):
+    title = forms.CharField(max_length=200)
+    body = forms.CharField(widget=forms.Textarea)
+    published_at = forms.DateTimeField()
+    published = forms.CheckboxInput()
+    tags = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple(), queryset=Tag.objects.all())
+
+    class Meta:
+        model = Blog
+        fields = ['title', 'body', 'published', 'published_at', 'tags']

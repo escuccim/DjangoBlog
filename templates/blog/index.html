@@ -5,7 +5,7 @@
         <div class="col-md-9">
             {% if blogs %}
                 {% for blog in blogs %}
-                    <div class="panel panel-info">
+                    <div class="panel {% if blog.is_published %} panel-info {% else %} panel-danger {% endif %}">
                         <div class="panel-heading">
                             <h3><a href="{% url 'blog:show' blog.slug %}">{{  blog.title }}</a></h3>
                             <p class="small">{{  blog.updated_at }}</p>

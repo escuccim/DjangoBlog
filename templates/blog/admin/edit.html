@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ blog.title }}{% endblock %}
+
+{% block body %}
+    {% if blog %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1>Edit : {{ blog }}</h1>
+            </div>
+            <div class="panel-body">
+                <form action="{% url 'blog:edit' blog.slug %}" method="POST">
+                    {% csrf_token %}
+                    {% for field in blog_form %}
+                         <div class="form-group">
+                            <label class="control-label col-md-2">{{  field.label }}</label>
+                            <div class="col-md-10">
+                                {{  field }}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-group">
+                        <div class="col-md-12 text-center">
+                            <button type="submit" name="update" class="btn btn-primary">Update Article</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

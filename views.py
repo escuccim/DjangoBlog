@@ -3,13 +3,21 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from .models import Blog, Tag, Comment
-from .forms import CommentForm
+from .forms import CommentForm, BlogEditForm
+from django.utils.timezone import datetime
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 def Index(request):
     all_blogs = Blog.objects.all()
+    now = datetime.now()
+
+    user = request.user
+
+    if not user.is_authenticated or not user.is_superuser:
+        all_blogs = all_blogs.filter(published=1).filter(published_at__lte=now)
+
     paginator = Paginator(all_blogs, 5)
     page = request.GET.get('page', 1)
     archives = get_archives()
@@ -20,10 +28,10 @@ def Index(request):
     except EmptyPage:
         blogs = paginator.page(paginator.num_pages)
 
-    return render(request, 'blog/index.html', {'blogs' : blogs, 'archives' : archives})
+    return render(request, 'blog/index.html', {'blogs' : blogs, 'archives' : archives, 'now': now})
 
 def Show(request, slug):
-    blog = get_object_or_404(Blog, slug=slug)
+    blog = get_object_or_404(Blog, published=1, slug=slug)
     comment_form = CommentForm()
     user = request.user
     return render(request, 'blog/detail.html', {'blog' : blog, 'comment_form' : comment_form, 'user': user})
@@ -74,3 +82,39 @@ def get_archives():
 
 def Amp(request, slug):
     pass
+
+
+def Edit(request, slug):
+    user = request.user
+    authorized = False
+    blog = get_object_or_404(Blog, slug=slug)
+
+    if user.is_authenticated():
+        if user.id == blog.author.id:
+            authorized = True
+
+    if not authorized:
+        return redirect('blog:show', slug)
+    else:
+        if request.method == 'POST':
+            blog_form = BlogEditForm(data=request.POST, instance=blog)
+            if blog_form.is_valid():
+                blog_form.save()
+                return redirect('blog:show', blog.slug)
+        else:
+            blog_form = BlogEditForm(instance=blog)
+            return render(request, 'blog/admin/edit.html', { 'blog' : blog, 'blog_form': blog_form })
+
+
+def Delete(request, slug):
+    blog = get_object_or_404(Blog, slug=slug)
+
+    user = request.user
+    if not user.is_authenticated or not user.id == blog.author.id:
+        return redirect('blog:show', slug)
+
+    if request.method == 'POST':
+        blog.delete()
+        return redirect('blog:index')
+
+    return render(request, 'blog/admin/delete.html', { 'blog': blog })

@@ -20,6 +20,17 @@
                     </div>
                 </div>
                 {% include 'blog/partials/labels.html' %}
+
+                {% if user.is_authenticated and user.id == blog.author.id %}
+                    <div class="row">
+                        <div class="col-md-3 col-md-offset-3">
+                            <a class="btn btn-default btn-block" href="{% url 'blog:edit' blog.slug %}">Edit</a>
+                        </div>
+                        <div class="col-md-3">
+                            <a class="btn btn-danger btn-block" href="{% url 'blog:delete' blog.slug %}">Delete</a>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
         {% if blog.comments %}
