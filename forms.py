@@ -1,7 +1,7 @@
 from  django import forms
 from blog.models import Comment, Tag, Blog
 from django.contrib.auth.models import User
-
+from django.contrib.admin import widgets
 
 class BootstrapModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -22,7 +22,7 @@ class CommentForm(BootstrapModelForm):
 class BlogEditForm(BootstrapModelForm):
     title = forms.CharField(max_length=200)
     body = forms.CharField(widget=forms.Textarea)
-    published_at = forms.DateTimeField()
+    published_at = forms.DateTimeField(widget=forms.DateInput())
     published = forms.CheckboxInput()
     tags = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple(), queryset=Tag.objects.all())
 

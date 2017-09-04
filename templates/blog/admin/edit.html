@@ -11,11 +11,15 @@
             <div class="panel-body">
                 <form action="{% url 'blog:edit' blog.slug %}" method="POST">
                     {% csrf_token %}
+                    {% if errors %}
+                        <div class="alert alert-danger">{{ errors }}</div>
+                    {% endif %}
                     {% for field in blog_form %}
                          <div class="form-group">
                             <label class="control-label col-md-2">{{  field.label }}</label>
                             <div class="col-md-10">
                                 {{  field }}
+                                {{ field.errors }}
                             </div>
                         </div>
                     {% endfor %}

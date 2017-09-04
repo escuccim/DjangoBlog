@@ -118,3 +118,25 @@ def Delete(request, slug):
         return redirect('blog:index')
 
     return render(request, 'blog/admin/delete.html', { 'blog': blog })
+
+
+def Create(request):
+    errors = False
+    user = request.user
+
+    if not user.is_authenticated:
+        return redirect('blog:index')
+
+    if request.method == 'POST':
+        blog_form = BlogEditForm(data=request.POST)
+        if blog_form.is_valid():
+            blog = blog_form.save(commit=False)
+            blog.author = user
+            blog.save()
+            return redirect('blog:show', blog.slug)
+        else:
+            errors = 'Please correct the errors indicated below'
+    else:
+        blog_form = BlogEditForm()
+
+    return render(request, 'blog/admin/create.html', { 'blog_form' : blog_form } )
