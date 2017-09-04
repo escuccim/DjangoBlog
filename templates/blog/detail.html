@@ -14,8 +14,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <p>{% if blog.image %}
-                            <img src="{{ blog.image }}" align="right">
-                        {% endif %}
+                            <img src="{{ blog.image.url }}" align="right" alt="{{ blog.image.name }}" style="max-width: 150px; max-height: 150px;">
+                         {% endif %}
                         {{  blog.body|safe }}</p>
                     </div>
                 </div>

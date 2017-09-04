@@ -10,7 +10,6 @@ urlpatterns = [
     url(r'^(?P<slug>[-\w\d]+)$', views.Show, name='show'),
     url(r'^(?P<slug>[-\w\d]+)/comment$', views.PostComment, name='comment'),
     url(r'^label/(?P<name>\w+)$', views.Label, name='labels'),
-
     url(r'^admin/(?P<slug>[-\w\d]+)/edit$', views.Edit, name='edit'),
     url(r'^admin/create$', views.Create, name='create'),
     url(r'^admin/(?P<slug>[-\w\d]+)/delete$', views.Delete, name='delete'),

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils.timezone import datetime
 from datetime import datetime
-
+from django.conf import settings
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
@@ -24,9 +24,7 @@ class Blog(models.Model):
     published_at = models.DateTimeField()
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    image = models.CharField(max_length=100, null=True, blank=True)
-    image_width = models.IntegerField(null=True, blank=True)
-    image_height = models.IntegerField(null=True, blank=True)
+    image = models.ImageField(upload_to='blog_images/', null=True, blank=True)
     tags = models.ManyToManyField(Tag)
 
     def __unicode__(self):

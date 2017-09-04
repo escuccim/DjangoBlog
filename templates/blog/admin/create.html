@@ -8,7 +8,7 @@
             <h1>New Article</h1>
         </div>
         <div class="panel-body">
-            <form action="{% url 'blog:create' %}" method="POST">
+            <form action="{% url 'blog:create' %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% if errors %}
                     <div class="alert alert-danger">{{ errors }}</div>
@@ -25,8 +25,11 @@
                 {% endfor %}
 
                 <div class="form-group">
-                    <div class="col-md-12 text-center">
-                        <button type="submit" name="update" class="btn btn-primary">Save Article</button>
+                    <div class="col-md-3 col-md-offset-3">
+                            <a href="{% url 'blog:index' %}" class="btn btn-block btn-default">Cancel</a>
+                        </div>
+                    <div class="col-md-3 text-center">
+                        <button type="submit" name="update" class="btn btn-primary btn-block">Save Article</button>
                     </div>
                 </div>
             </form>
