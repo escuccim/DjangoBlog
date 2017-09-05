@@ -9,7 +9,7 @@
     <div class="panel-footer">
     {% if user.is_authenticated %}
         <button class="btn btn-default btn-sm reply-button" data-val="{{  comment.pk }}">Reply</button>
-        {% if user.author.pk == comment.author.pk %}
+        {% if user.pk == comment.author.pk %}
             <a href="{% url 'blog:comment.delete' comment.pk %}" class="btn btn-warning btn-sm">Delete</a>
         {% endif %}
     {% endif %}
