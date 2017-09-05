@@ -53,12 +53,11 @@ def PostComment(request, slug):
                 parent = Comment.objects.get(pk=form.cleaned_data['parent_id'])
                 comment.parent = parent
             comment.blog = blog
-            author = Author.objects.get(user=request.user)
+            author = user=request.user
             comment.author = author
             comment.save()
         else:
-            return HttpResponse("Invalid!")
-            print form.errors
+            return HttpResponse(form.errors)
     else:
         pass
 

@@ -13,7 +13,7 @@ class BootstrapModelForm(forms.ModelForm):
 
 class CommentForm(BootstrapModelForm):
     body = forms.TextInput()
-    parent_id = forms.IntegerField(widget=forms.HiddenInput())
+    parent_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Comment
