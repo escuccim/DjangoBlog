@@ -18,7 +18,7 @@ def Index(request):
     if not user.is_authenticated or not user.is_superuser:
         all_blogs = all_blogs.filter(published=1).filter(published_at__lte=now)
 
-    paginator = Paginator(all_blogs, 5)
+    paginator = Paginator(all_blogs, 4)
     page = request.GET.get('page', 1)
     archives = get_archives()
     try:
@@ -70,7 +70,7 @@ def DeleteComment(request, pk):
     return redirect('blog:show', blog.slug)
 
 def get_archives():
-    blog_list = Blog.objects.raw("SELECT strftime('%m', updated_at) as month, strftime('%Y', updated_at) as year, id, slug, title from blog_blog order by year desc, month desc")
+    blog_list = Blog.objects.raw("SELECT month(updated_at) as month, year(updated_at) as year, id, slug, title from blog_blog order by year desc, month desc")
     blog_dict = {}
     month_dict = {}
     for item in blog_list:
