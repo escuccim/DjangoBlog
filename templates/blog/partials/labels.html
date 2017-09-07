@@ -1,5 +1,7 @@
+{% load i18n %}
+
 {% if blog.tags %}
-    <p class="small">Labels:
+    <p class="small">{% trans "Labels" %}:
     {% for tag in blog.tags.all %}
         <a href="{% url 'blog:labels' tag.name %}">{{ tag.name }}</a>
         {% if not forloop.last %},{% endif %}

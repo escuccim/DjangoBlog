@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="panel panel-default">
     <div class="panel-heading">
         {{  comment.author.first_name }} {{  comment.author.last_name }}
@@ -8,9 +9,9 @@
     </div>
     <div class="panel-footer">
     {% if user.is_authenticated %}
-        <button class="btn btn-default btn-sm reply-button" data-val="{{  comment.pk }}">Reply</button>
+        <button class="btn btn-default btn-sm reply-button" data-val="{{  comment.pk }}">{% trans "Reply" %}</button>
         {% if user.pk == comment.author.pk %}
-            <a href="{% url 'blog:comment.delete' comment.pk %}" class="btn btn-warning btn-sm">Delete</a>
+            <a href="{% url 'blog:comment.delete' comment.pk %}" class="btn btn-warning btn-sm">{% trans "Delete" %}</a>
         {% endif %}
     {% endif %}
     </div>
@@ -28,7 +29,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary btn-sm">Post Reply</button>
+                    <button type="submit" class="btn btn-primary btn-sm">[% trans "Post Reply" %}</button>
                 </div>
             </div>
         </form>
