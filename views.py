@@ -7,6 +7,7 @@ from .forms import CommentForm, BlogEditForm
 from django.utils.timezone import datetime
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.translation import ugettext_lazy as _
 
 # Create your views here.
 def Index(request):
@@ -134,7 +135,7 @@ def Create(request):
             blog.save()
             return redirect('blog:show', blog.slug)
         else:
-            errors = 'Please correct the errors indicated below'
+            errors = _('Please correct the errors indicated below')
     else:
         blog_form = BlogEditForm()
 
