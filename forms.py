@@ -22,7 +22,7 @@ class CommentForm(BootstrapModelForm):
 class BlogEditForm(BootstrapModelForm):
     title = forms.CharField(max_length=200)
     body = forms.CharField(widget=forms.Textarea)
-    image = forms.ImageField()
+    image = forms.ImageField(required=False)
     published_at = forms.DateTimeField(widget=forms.DateInput())
     published = forms.CheckboxInput()
     tags = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple(), queryset=Tag.objects.all())
