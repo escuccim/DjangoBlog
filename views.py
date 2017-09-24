@@ -9,6 +9,7 @@ from django.utils.timezone import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.translation import ugettext_lazy as _
 from django.utils.dateparse import parse_date
+from collections import OrderedDict
 
 # Create your views here.
 def Index(request):
@@ -74,8 +75,8 @@ def DeleteComment(request, pk):
 
 def get_archives():
     blog_list = Blog.objects.raw("SELECT month(published_at) as month, year(published_at) as year, id, slug, title from blogs where published = 1 order by year desc, month desc")
-    blog_dict = {}
-    month_dict = {}
+    blog_dict = OrderedDict()
+    month_dict = OrderedDict()
     current_month = 0
     current_year = 0
 
@@ -85,7 +86,7 @@ def get_archives():
 
         if current_month != item.month or current_year != item.year:
             month_list = [item_list]
-            month_dict = {}
+            month_dict = OrderedDict()
             month_dict.setdefault(date, month_list)
             blog_dict.setdefault(item.year, month_dict)
         else:
