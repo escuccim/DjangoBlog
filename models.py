@@ -11,12 +11,15 @@ from django.conf import settings
 class Tag(models.Model):
     name = models.CharField(max_length=100)
 
+    class Meta:
+        db_table = 'tags'
+
     def __unicode__(self):
         return self.name
 
 # Create your models here.
 class Blog(models.Model):
-    author = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     published = models.BooleanField(default=0)
@@ -25,7 +28,7 @@ class Blog(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='blog_images/', null=True, blank=True)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag,db_table='blog_tags')
 
     def __unicode__(self):
         return self.title
@@ -42,7 +45,7 @@ class Blog(models.Model):
         super(Blog, self).save()
 
     def comments(self):
-        comment_set = Comment.objects.filter(blog=self).filter(parent=None)
+        comment_set = Comment.objects.filter(blog=self).filter(parent_comment=None)
         return comment_set
 
     def is_published(self):
@@ -51,14 +54,15 @@ class Blog(models.Model):
         return datetime.now(self.published_at.tzinfo) > self.published_at
 
     class Meta:
+        db_table = 'blogs'
         get_latest_by = "updated_at"
         ordering = ['-updated_at']
 
 class Comment(models.Model):
-    author = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     body = models.TextField()
     blog = models.ForeignKey(Blog)
-    parent = models.ForeignKey("self", null=True, blank=True)
+    parent_comment = models.ForeignKey("self", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -66,8 +70,8 @@ class Comment(models.Model):
         return self.body
 
     def children(self):
-        child_comments = Comment.objects.filter(parent=self)
+        child_comments = Comment.objects.filter(parent_comment=self)
         return child_comments
 
     class Meta:
-        pass
+        db_table = 'blogcomments'
