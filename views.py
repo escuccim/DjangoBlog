@@ -8,6 +8,7 @@ from django.utils.timezone import datetime
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.translation import ugettext_lazy as _
+from django.utils.dateparse import parse_date
 
 # Create your views here.
 def Index(request):
@@ -22,6 +23,7 @@ def Index(request):
     paginator = Paginator(all_blogs, 4)
     page = request.GET.get('page', 1)
     archives = get_archives()
+    # return HttpResponse(archives)
     try:
         blogs = paginator.page(page)
     except PageNotAnInteger:
@@ -71,12 +73,28 @@ def DeleteComment(request, pk):
     return redirect('blog:show', blog.slug)
 
 def get_archives():
-    blog_list = Blog.objects.raw("SELECT month(updated_at) as month, year(updated_at) as year, id, slug, title from blog_blog order by year desc, month desc")
+    blog_list = Blog.objects.raw("SELECT month(published_at) as month, year(published_at) as year, id, slug, title from blogs where published = 1 order by year desc, month desc")
     blog_dict = {}
     month_dict = {}
+    current_month = 0
+    current_year = 0
+
     for item in blog_list:
-        month_dict.setdefault(item.month, []).append([item.id, item.slug, item.title])
-        blog_dict.setdefault(item.year, month_dict )
+        date = parse_date(str(item.year) + '-' + str(item.month) + '-01')
+        item_list = [int(item.id), item.slug, item.title]
+
+        if current_month != item.month or current_year != item.year:
+            month_list = [item_list]
+            month_dict = {}
+            month_dict.setdefault(date, month_list)
+            blog_dict.setdefault(item.year, month_dict)
+        else:
+            # month_list.append([item.id, item.slug, item.title])
+            month_list.append(item_list)
+            blog_dict[item.year][date] = month_list
+
+        current_month = item.month
+        current_year = item.year
 
     return blog_dict
 
