@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils.timezone import datetime
 from datetime import datetime
@@ -19,7 +18,7 @@ class Tag(models.Model):
 
 # Create your models here.
 class Blog(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     published = models.BooleanField(default=0)
@@ -28,7 +27,7 @@ class Blog(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='blog_images/', null=True, blank=True)
-    tags = models.ManyToManyField(Tag,db_table='blog_tags')
+    tags = models.ManyToManyField(Tag,db_table='blog_tag')
 
     def __unicode__(self):
         return self.title
@@ -59,7 +58,7 @@ class Blog(models.Model):
         ordering = ['-updated_at']
 
 class Comment(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     body = models.TextField()
     blog = models.ForeignKey(Blog)
     parent_comment = models.ForeignKey("self", null=True, blank=True)
