@@ -2,6 +2,7 @@
 {% load i18n %}
 
 {% block title %}{{ blog.title }}{% endblock %}
+{% block meta_description %}{% trans "Blog show meta description" %} {{ blog.title }}{% endblock %}
 
 {% block body %}
     {% if blog %}
