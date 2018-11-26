@@ -18,7 +18,7 @@ class Tag(models.Model):
 
 # Create your models here.
 class Blog(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=50, unique=True, blank=True)
     published = models.BooleanField(default=0)
@@ -58,9 +58,9 @@ class Blog(models.Model):
         ordering = ['-updated_at']
 
 class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     body = models.TextField()
-    blog = models.ForeignKey(Blog)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     parent_comment = models.ForeignKey("self", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
