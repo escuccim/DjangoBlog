@@ -31,7 +31,10 @@ class Blog(models.Model):
 
     def __unicode__(self):
         return self.title
-
+    
+    def __str__(self):
+        return self.title
+    
     @staticmethod
     def latest_posts(num_posts):
         today = datetime.today()
@@ -67,7 +70,10 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return self.body
-
+    
+    def __str__(self):
+        return self.body
+    
     def children(self):
         child_comments = Comment.objects.filter(parent_comment=self)
         return child_comments
